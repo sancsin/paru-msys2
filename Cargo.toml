@@ -17,7 +17,7 @@ include = ["src/**/*", "LICENSE", "README.md", "CHANGELOG.md", "help"]
 alpm = "2.2.1"
 alpm-utils = "1.1.2"
 aur-depends = "1.0.3"
-aur-fetch = "0.10.0"
+aur-fetch = {git = "https://github.com/sancsin/aur-fetch.rs-msys2.git", branch = "windows"}
 cini = "1.0.0"
 pacmanconf = "1.0.0"
 raur = "5.0.1"
@@ -33,6 +33,7 @@ globset = "0.4.8"
 htmlescape = "0.3.1"
 indicatif = "0.16.2"
 kuchiki = "0.8.1"
+#[cfg(not(target_os="windows"))]
 nix = "0.23.1"
 reqwest = { version = "0.11.9", features = ["gzip", "socks"] }
 rss = { version = "2.0.0", default-features = false }

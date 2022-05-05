@@ -19,7 +19,9 @@ use ansi_term::Style;
 use anyhow::{anyhow, bail, ensure, Context, Error, Result};
 use cini::{Callback, CallbackKind, Ini};
 use globset::{Glob, GlobSet, GlobSetBuilder};
+#[cfg(not(target_os="windows"))]
 use nix::unistd::{dup2, isatty};
+#[cfg(not(target_os="windows"))]
 use std::os::unix::io::AsRawFd;
 use tr::tr;
 use url::Url;

@@ -4,9 +4,15 @@ use crate::exec;
 use crate::print_error;
 use crate::printtr;
 use crate::util::ask;
-
+#[cfg(target_os="windows")]
+use crate::msys_helpers::*;
+#[cfg(not(target_os="windows"))]
 use std::fs::{read_dir, remove_dir_all, remove_file, set_permissions, DirEntry};
-
+#[cfg(target_os="windows")]
+use std::fs::{read_dir, remove_dir_all, remove_file, DirEntry};
+#[cfg(target_os="windows")]
+use std::ffi::CString;
+#[cfg(not(target_os="windows"))]
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::process::Command;
@@ -105,11 +111,19 @@ fn clean_aur(
     Ok(())
 }
 
+#[cfg(not(target_os="windows"))]
 fn fix_perms(file: &Path) -> Result<()> {
     let pkg = file.join("pkg");
     let mut perms = pkg.metadata()?.permissions();
     perms.set_mode(0o755);
     set_permissions(pkg, perms)?;
+    Ok(())
+}
+
+#[cfg(target_os="windows")]
+fn fix_perms(file: &Path) -> Result<()> {
+    let pkg = file.join("pkg");
+    msys_set_permissions(pkg.to_str().unwrap(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
     Ok(())
 }
 

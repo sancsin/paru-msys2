@@ -24,6 +24,8 @@ mod stats;
 mod sync;
 mod upgrade;
 mod util;
+#[cfg(target_os="windows")]
+mod msys_helpers;
 
 #[cfg(feature = "mock")]
 mod mock;
@@ -276,7 +278,10 @@ async fn handle_sync(config: &mut Config) -> Result<i32> {
 }
 
 fn handle_repo(config: &mut Config) -> Result<i32> {
+    #[cfg(not(target_os="windows"))]
     use std::os::unix::ffi::OsStrExt;
+    #[cfg(target_os="windows")]
+    use std::os::windows::ffi::OsStrExt;
 
     let repoc = config.color.sl_repo;
     let pkgc = config.color.sl_pkg;
